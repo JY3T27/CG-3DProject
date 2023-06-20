@@ -1,0 +1,90 @@
+void humanModel() {
+	//head
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.2, 0.2, 0.2);
+	glTranslated(0.0, 9.0, 0.0);
+	glutSolidSphere(5.0, 25.0, 25.0);
+	glPopMatrix();
+
+	//body
+	glPushMatrix();
+	glColor3f(0.9f, 0.9f, 0.5f);
+	glScaled(0.8, 1.0, 0.5);
+	glTranslated(0.0, -0.5, 0.0);
+	glutSolidCube(3.0);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(5.0, 0.9, 0.0);
+		glRotatef(angle , 1.0, 0.0, 0.0);
+		glTranslatef(-5.0, -0.9, 0.0);
+
+		//left hand
+		glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.3, 1.0, 0.3); // scaling size
+		glTranslated(5.0, -0.3, 0.0); //positioning
+		glutSolidCube(2.0); //size
+		glPopMatrix();
+		//left fist
+		glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.1, 0.1, 0.1);
+		glTranslated(15.0, -16, 0.0);
+		glutSolidSphere(3.0, 25.0, 25.0);
+		glPopMatrix();
+
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(5.0, 0.9, 0.0);
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+		glTranslatef(-5.0, -0.9, 0.0);
+	
+		//right hand
+		glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.3, 1.0, 0.3);
+		glTranslated(-5.0, -0.3, 0.0);
+		glutSolidCube(2.0);
+		glPopMatrix();
+
+		//right fist
+		glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.1, 0.1, 0.1);
+		glTranslated(-16.0, -16, 0.0);
+		glutSolidSphere(3.0, 25.0, 25.0);
+		glPopMatrix();
+	glPopMatrix();
+
+
+	glPushMatrix();
+		glTranslatef(-1.4, -2.2, 0.0);
+		glRotatef(angle, 1.0, 0.0, 0.0);
+		glTranslatef(1.4, 2.2, 0.0);
+		
+		//left leg
+		glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.4, 1.2, 0.3);
+		glTranslated(-1.4, -2.5, 0.0);
+		glutSolidCube(2.0);
+		glPopMatrix();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(1.4, -2.2, 0.0);
+		glRotatef(-angle, 1.0, 0.0, 0.0);
+		glTranslatef(-1.4, 2.2, 0.0);
+	
+		//right leg
+			glPushMatrix();
+		glColor3f(0.95f, 0.75f, 0.6f);
+		glScaled(0.4, 1.2, 0.3);
+		glTranslated(1.4, -2.5, 0.0);
+		glutSolidCube(2.0);
+		glPopMatrix();
+	glPopMatrix();
+}
