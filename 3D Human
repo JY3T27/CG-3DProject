@@ -43,7 +43,7 @@ void humanModel()
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
 	glScaled(0.1, 0.1, 0.1);
-	glTranslated(15.0, -18, 0.0);
+	glTranslated(16.5, -18, 0.0);
 	glutSolidSphere(3.0, 25.0, 25.0);
 	glPopMatrix();
 
@@ -67,7 +67,7 @@ void humanModel()
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
 	glScaled(0.4, 1.2, 0.3);
-	glTranslated(-1.0, -2.5, 0.0);
+	glTranslated(-1.2, -2.5, 0.0);
 	glutSolidCube(2.0);
 	glPopMatrix();
 
@@ -75,7 +75,7 @@ void humanModel()
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
 	glScaled(0.4, 1.2, 0.3);
-	glTranslated(1.0, -2.5, 0.0);
+	glTranslated(1.2, -2.5, 0.0);
 	glutSolidCube(2.0);
 	glPopMatrix();
 }
