@@ -85,7 +85,7 @@ void humanModel() {
 		glTranslatef(-1.4, 2.2, 0.0);
 	
 		//right leg
-			glPushMatrix();
+		glPushMatrix();
 		glColor3f(0.95f, 0.75f, 0.6f);
 		glScaled(0.4, 1.2, 0.3);
 		glTranslated(1.4, -2.5, 0.0);
