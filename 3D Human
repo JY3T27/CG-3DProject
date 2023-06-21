@@ -12,81 +12,15 @@
 #define SCREEN_HEIGHT	500
 #define FPS	30
 
-float angle = 0.0;
-
-void square() {
-	glBegin(GL_QUADS);
-	glVertex3f(1.0, 1.0, 0.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-}
-
-void rectangle() {
-	glBegin(GL_QUADS);
-	glVertex3f(1.0, 1.0, 0.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glEnd();
-}
-
-void cube() {
-	glNormal3f(0, 0, 1);
-
-	glPushMatrix();
-	glColor3d(1.0, 0.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3d(0.0, 1.0, 0.0);
-	glRotated(90.0, 0.0, 1.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3d(1.0, 1.0, 0.0);
-	glRotated(180.0, 0.0, 1.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3d(0.0, 1.0, 1.0);
-	glRotated(270.0, 0.0, 1.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3d(1.0, 0.0, 1.0);
-	glRotated(-90.0, 1.0, 0.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-	glPushMatrix();
-	glColor3d(1.0, 1.0, 1.0);
-	glRotated(90.0, 1.0, 0.0, 0.0);
-	glTranslated(0.0, 0.0, 1.0);
-	square();
-	glPopMatrix();
-
-}
-
-void display() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+void humanModel() 
+{
 	//head
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
-	glScaled(0.2, 0.2, 0.2);
-	glTranslated(0.0, 9.0, 0.0);
-	glutSolidSphere(5.0, 25.0, 25.0);
+	
+	glScaled(0.5, 0.5, 0.5);		//glScaled(0.5, 0.5, 0.5);
+	glTranslated(0.0, 3.7, 0.0);		//glTranslated(0.0, 9.0, 0.0);
+	glutSolidCube(3.0);			//glutSolidSphere(5.0, 25.0, 25.0);
 	glPopMatrix();
 
 	//body
@@ -116,8 +50,8 @@ void display() {
 	//right hand
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
-	glScaled(0.5, 1.0, 0.3); 
-	glTranslated(-3.0, -0.5, 0.0); 
+	glScaled(0.5, 1.0, 0.3);
+	glTranslated(-3.0, -0.5, 0.0);
 	glutSolidCube(2.0);
 	glPopMatrix();
 
@@ -132,8 +66,8 @@ void display() {
 	//left leg
 	glPushMatrix();
 	glColor3f(0.95f, 0.75f, 0.6f);
-	glScaled(0.4, 1.2, 0.3); 
-	glTranslated(-1.0, -2.5, 0.0); 
+	glScaled(0.4, 1.2, 0.3);
+	glTranslated(-1.0, -2.5, 0.0);
 	glutSolidCube(2.0);
 	glPopMatrix();
 
@@ -144,23 +78,28 @@ void display() {
 	glTranslated(1.0, -2.5, 0.0);
 	glutSolidCube(2.0);
 	glPopMatrix();
+}
+
+void display() 
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	humanModel();
 
 	glFlush();
 	glutSwapBuffers();
 }
 
-void idle() {
+void idle() 
+{
 	DWORD start = GetTickCount64();
 	while (GetTickCount64() - start < 1000 / FPS);
 
-	angle += 0.1;
-	if (angle > 360.0) angle = 0.0;
-
 	glutPostRedisplay();
-
 }
 
-void initGL() {
+void initGL() 
+{
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glPointSize(10.0);
 	glLineWidth(5.0);
@@ -185,7 +124,8 @@ void initGL() {
 	glEnable(GL_DEPTH_TEST);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
 	glutInit(&argc, argv);
 	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -195,5 +135,4 @@ int main(int argc, char** argv) {
 	initGL();
 
 	glutMainLoop();
-
 }
