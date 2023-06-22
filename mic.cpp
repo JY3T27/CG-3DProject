@@ -5,7 +5,7 @@ void drawMicrophone() {
 	// Draw the microphone base (a cylinder)
 	glColor3f(0.5f, 0.5f, 0.5f);
 	GLUquadricObj* base = gluNewQuadric();
-	gluCylinder(base, MICROPHONE_RADIUS, MICROPHONE_RADIUS, MICROPHONE_HEIGHT * 0.3, 16, 1);
+	gluCylinder(base, MICROPHONE_RADIUS * 0.8, MICROPHONE_RADIUS * 0.8, MICROPHONE_HEIGHT * 0.3, 16, 1);
 
 	// Draw the microphone body (a cone)
 	glTranslatef(0.0f, 0.0f, MICROPHONE_HEIGHT * 0.2);
