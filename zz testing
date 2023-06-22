@@ -20,11 +20,94 @@ float scale = 2;
 
 GLuint texture1; // Texture ID
 
-void loadTexture(const char* fileName) 
+void display();
+void initGL();
+void timer(int value);
+void loadTexture(const char* fileName);
+
+void floor();
+void cube();
+void drawLine3D(float startX, float startY, float startZ, float endX, float endY, float endZ);
+void drawCylinder(float radius, float height);
+void groupCylinder();
+void groupLines();
+void camera();
+void drawSphere(float radius, int slices, int stacks);
+void texture();
+void reshape(int width, int height);
+void stage();
+void humanModel();
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutInitWindowSize(1600, 800);
+	glutCreateWindow("Cube Example");
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutTimerFunc(0, timer, 0);
+	glEnable(GL_DEPTH_TEST);
+	loadTexture("C:/Users/HP/Downloads/tt.jpg");
+
+	glutMainLoop();
+	return 0;
+}
+
+void display()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+
+	camera();
+	texture();
+
+	floor();
+	stage();
+
+	glPushMatrix();
+		glScaled(0.2, 0.2, 0.2);
+		glTranslated(0.0, 3.0, 0.0);
+		glRotated(40.0, 0.0, 1.0, 0.0);
+		glRotated(10.0, 1.0, 0.0, 0.0);
+		humanModel();
+	glPopMatrix();
+
+	glFlush();
+	glutSwapBuffers();
+}
+
+void initGL()
+{
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glPointSize(10.0);
+	glLineWidth(5.0);
+
+	// lights
+	glEnable(GL_COLOR_MATERIAL); // cheat!!!!
+	glEnable(GL_LIGHTING);
+	GLfloat dir[] = { 0.2, 0.0, 1.0, 0.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, dir);
+	glEnable(GL_LIGHT0);
+
+	// depth buffer
+	glEnable(GL_DEPTH_TEST);
+}
+
+void timer(int value)
+{
+	glutPostRedisplay();
+	glutTimerFunc(16, timer, 0);
+}
+
+void loadTexture(const char* fileName)
 {
 	int width, height, numChannels;
 	unsigned char* imageData = stbi_load(fileName, &width, &height, &numChannels, 0);
-	if (!imageData) 
+	if (!imageData)
 	{
 		printf("Failed to load texture: %s\n", fileName);
 		return;
@@ -180,11 +263,12 @@ void groupLines()
 void camera()
 {
 	gluLookAt(cameraX, cameraY, cameraZ,  // camera position
-		targetX, targetY, targetZ,                                // target position
-		0.0, 1.0, 0.0);                               // up vector
+		targetX, targetY, targetZ,        // target position
+		0.0, 1.0, 0.0);                   // up vector
 }
 
-void drawSphere(float radius, int slices, int stacks) {
+void drawSphere(float radius, int slices, int stacks)
+{
 	float theta, phi;
 	float thetaStep = 2.0f * PI / slices;
 	float phiStep = PI / stacks;
@@ -227,46 +311,6 @@ void texture()
 	glDisable(GL_TEXTURE_2D);
 }
 
-void display()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-
-	camera();
-	texture();
-	floor();
-	glPushMatrix();
-		glTranslatef(0.0, -0.5, 0.0);
-		cube();
-		groupCylinder();
-		groupLines();
-	glPopMatrix();
-
-	glFlush();
-	glutSwapBuffers();
-}
-
-void initGL()
-{
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glPointSize(10.0);
-	glLineWidth(5.0);
-
-	// lights
-	glEnable(GL_COLOR_MATERIAL); // cheat!!!!
-	glEnable(GL_LIGHTING);
-
-	GLfloat dir[] = { 0.2, 0.0, 1.0, 0.0 };
-	glLightfv(GL_LIGHT0, GL_POSITION, dir);
-	glEnable(GL_LIGHT0);
-
-	// depth buffer
-	glEnable(GL_DEPTH_TEST);
-}
-
 void reshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -275,24 +319,80 @@ void reshape(int width, int height)
 	gluPerspective(45.0, (double)width / (double)height, 1.0, 100.0);
 }
 
-void timer(int value)
+void stage()
 {
-	glutPostRedisplay();
-	glutTimerFunc(16, timer, 0);
+	glPushMatrix();
+		glTranslatef(0.0, -0.5, 0.0);
+		cube();
+		groupCylinder();
+		groupLines();
+	glPopMatrix();
 }
 
-int main(int argc, char** argv)
+void humanModel()
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(1600, 800);
-	glutCreateWindow("Cube Example");
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutTimerFunc(0, timer, 0);
-	glEnable(GL_DEPTH_TEST);
-	loadTexture("C:/Users/HP/Downloads/tt.jpg");
+	//head
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
 
-	glutMainLoop();
-	return 0;
+	glScaled(0.5, 0.5, 0.5);		//glScaled(0.5, 0.5, 0.5);
+	glTranslated(0.0, 3.7, 0.0);		//glTranslated(0.0, 9.0, 0.0);
+	glutSolidCube(3.0);			//glutSolidSphere(5.0, 25.0, 25.0);
+	glPopMatrix();
+
+	//body
+	glPushMatrix();
+	glColor3f(0.9f, 0.9f, 0.5f);
+	glScaled(0.8, 1.0, 0.5);
+	glTranslated(0.0, -0.5, 0.0);
+	glutSolidCube(3.0);
+	glPopMatrix();
+
+	//left hand
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.5, 1.0, 0.3); // scaling size
+	glTranslated(3.0, -0.5, 0.0); //positioning
+	glutSolidCube(2.0); //size
+	glPopMatrix();
+
+	//left fist
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.1, 0.1, 0.1);
+	glTranslated(16.5, -18, 0.0);
+	glutSolidSphere(3.0, 25.0, 25.0);
+	glPopMatrix();
+
+	//right hand
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.5, 1.0, 0.3);
+	glTranslated(-3.0, -0.5, 0.0);
+	glutSolidCube(2.0);
+	glPopMatrix();
+
+	//right fist
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.1, 0.1, 0.1);
+	glTranslated(-16.0, -18, 0.0);
+	glutSolidSphere(3.0, 25.0, 25.0);
+	glPopMatrix();
+
+	//left leg
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.4, 1.2, 0.3);
+	glTranslated(-1.2, -2.5, 0.0);
+	glutSolidCube(2.0);
+	glPopMatrix();
+
+	//right leg
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.4, 1.2, 0.3);
+	glTranslated(1.2, -2.5, 0.0);
+	glutSolidCube(2.0);
+	glPopMatrix();
 }
