@@ -869,7 +869,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(0, 4, 5, 0, 0, 0, 0, 1, 0);  
+    gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);  
    
     glEnable(GL_DEPTH_TEST);    // Enable depth testing
     drawFace();
