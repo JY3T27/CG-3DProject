@@ -1,10 +1,12 @@
-﻿#include <GL/glut.h>
+#include <GL/glut.h>
 #include "stb_image.h"
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 800
 
 GLuint textureID[20];
 int width, height, channels;
+
+
 void loadTexRepeats()
 {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -13,7 +15,8 @@ void loadTexRepeats()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void loadTexture() {
+void loadTexture() 
+{
     //flip image vertically
     stbi_set_flip_vertically_on_load(true);
 
@@ -78,10 +81,10 @@ void loadTexture() {
     loadTexRepeats();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBack7);
     stbi_image_free(imageBack7);
-
 }
 
-void drawBody() {
+void drawBody() 
+{
     // Define the cuboid's vertices
     GLfloat vertices[8][3] = {
         {-0.5, -1.0, -0.25},
@@ -131,7 +134,6 @@ void drawBody() {
     glTexCoord2fv(texCoords[3]);
     glVertex3fv(vertices[3]);
     glEnd();
-
 
     // Draw the front face with textureID coordinates
     glBindTexture(GL_TEXTURE_2D, textureID[7]);
@@ -202,12 +204,11 @@ void drawBody() {
     glEnd();
 
     // Disable textureID mapping
-
     glPopMatrix();
 }
 
-void drawFace() {
-
+void drawFace()
+{
     // Define the cube's vertices
     GLfloat vertices[8][3] = {
         {-0.5, -0.5, -0.5},
@@ -250,10 +251,8 @@ void drawFace() {
     glTranslatef(0.0f, 2, 0.0f);
 
     glEnable(GL_TEXTURE_2D);
-
     glBindTexture(GL_TEXTURE_2D, textureID[1]);  // Front face textureID
     glBegin(GL_QUADS);
-   
     glNormal3fv(normals[1]);
     glTexCoord2fv(texCoords[1][0]);
     glVertex3fv(vertices[5]);
@@ -265,10 +264,9 @@ void drawFace() {
     glVertex3fv(vertices[6]);
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[2]);  // Back face textureID
     // Draw the front face with textureID coordinates and normal vectors
+    glBindTexture(GL_TEXTURE_2D, textureID[2]);  // Back face textureID
     glBegin(GL_QUADS);
-   
     glNormal3fv(normals[0]);
     glTexCoord2fv(texCoords[0][0]);
     glVertex3fv(vertices[0]);
@@ -280,11 +278,9 @@ void drawFace() {
     glVertex3fv(vertices[3]);
     glEnd();
 
-
     // Draw the right face with textureID coordinates and normal vectors
     glBindTexture(GL_TEXTURE_2D, textureID[3]);
     glBegin(GL_QUADS);
-   
     glNormal3fv(normals[2]);
     glTexCoord2fv(texCoords[2][0]);
     glVertex3fv(vertices[1]);
@@ -326,7 +322,6 @@ void drawFace() {
 
     // Draw the bottom face with textureID coordinates and normal vectors
     glBindTexture(GL_TEXTURE_2D, textureID[6]);
-   
     glBegin(GL_QUADS);
     glNormal3fv(normals[5]);
     glTexCoord2fv(texCoords[5][0]);
@@ -340,11 +335,11 @@ void drawFace() {
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
-
     glPopMatrix();
 }
 
-void drawHand() {
+void drawHand() 
+{
     // Define the cube's vertices
     GLfloat vertices[8][3] = {
         {-0.2, -1.0, -0.2},
@@ -401,7 +396,6 @@ void drawHand() {
 
     // Draw the front face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[0]);
     glTexCoord2fv(texCoords[0][0]);
     glVertex3fv(vertices[0]);
@@ -416,7 +410,6 @@ void drawHand() {
 
     // Draw the right face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[2]);
     glTexCoord2fv(texCoords[2][0]);
     glVertex3fv(vertices[1]);
@@ -455,7 +448,6 @@ void drawHand() {
     glEnd();
 
     // Draw the bottom face with textureID coordinates and normal vectors
-
     glBegin(GL_QUADS);
     glNormal3fv(normals[5]);
     glTexCoord2fv(texCoords[5][0]);
@@ -468,9 +460,7 @@ void drawHand() {
     glVertex3fv(vertices[1]);
     glEnd();
 
-
     glPopMatrix();
-   
 }
 
 void drawHand_right()
@@ -517,7 +507,7 @@ void drawHand_right()
     glTranslatef(-0.7, 0.5, 0);
 
     glBegin(GL_QUADS);
-    glColor3f(0.55,0,0);
+    glColor3f(0.55, 0, 0);
     glNormal3fv(normals[1]);
     glTexCoord2fv(texCoords[1][0]);
     glVertex3fv(vertices[5]);
@@ -531,7 +521,6 @@ void drawHand_right()
 
     // Draw the front face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[0]);
     glTexCoord2fv(texCoords[0][0]);
     glVertex3fv(vertices[0]);
@@ -543,10 +532,8 @@ void drawHand_right()
     glVertex3fv(vertices[3]);
     glEnd();
 
-
     // Draw the right face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[2]);
     glTexCoord2fv(texCoords[2][0]);
     glVertex3fv(vertices[1]);
@@ -585,7 +572,6 @@ void drawHand_right()
     glEnd();
 
     // Draw the bottom face with textureID coordinates and normal vectors
-
     glBegin(GL_QUADS);
     glNormal3fv(normals[5]);
     glTexCoord2fv(texCoords[5][0]);
@@ -598,10 +584,7 @@ void drawHand_right()
     glVertex3fv(vertices[1]);
     glEnd();
 
-
     glPopMatrix();
-
-
 }
 
 void drawLeg_left()
@@ -662,7 +645,6 @@ void drawLeg_left()
 
     // Draw the front face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[0]);
     glTexCoord2fv(texCoords[0][0]);
     glVertex3fv(vertices[0]);
@@ -674,10 +656,8 @@ void drawLeg_left()
     glVertex3fv(vertices[3]);
     glEnd();
 
-
     // Draw the right face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[2]);
     glTexCoord2fv(texCoords[2][0]);
     glVertex3fv(vertices[1]);
@@ -716,7 +696,6 @@ void drawLeg_left()
     glEnd();
 
     // Draw the bottom face with textureID coordinates and normal vectors
-
     glBegin(GL_QUADS);
     glNormal3fv(normals[5]);
     glTexCoord2fv(texCoords[5][0]);
@@ -729,9 +708,7 @@ void drawLeg_left()
     glVertex3fv(vertices[1]);
     glEnd();
 
-
     glPopMatrix();
-
 }
 
 void drawLeg_right()
@@ -792,7 +769,6 @@ void drawLeg_right()
 
     // Draw the front face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[0]);
     glTexCoord2fv(texCoords[0][0]);
     glVertex3fv(vertices[0]);
@@ -804,10 +780,8 @@ void drawLeg_right()
     glVertex3fv(vertices[3]);
     glEnd();
 
-
     // Draw the right face with textureID coordinates and normal vectors
     glBegin(GL_QUADS);
-
     glNormal3fv(normals[2]);
     glTexCoord2fv(texCoords[2][0]);
     glVertex3fv(vertices[1]);
@@ -846,7 +820,6 @@ void drawLeg_right()
     glEnd();
 
     // Draw the bottom face with textureID coordinates and normal vectors
-
     glBegin(GL_QUADS);
     glNormal3fv(normals[5]);
     glTexCoord2fv(texCoords[5][0]);
@@ -859,34 +832,31 @@ void drawLeg_right()
     glVertex3fv(vertices[1]);
     glEnd();
 
-
     glPopMatrix();
-
 }
 
-void display() {
+void display() 
+{
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);  
-   
+    gluLookAt(5, 5, 5, 0, 0, 0, 0, 1, 0);
+
     glEnable(GL_DEPTH_TEST);    // Enable depth testing
     drawFace();
     drawBody();
     drawHand();
- 
     drawHand_right();
-
     drawLeg_left();
-
     drawLeg_right();
 
     glFlush();
     glutSwapBuffers();
 }
 
-void reshape(int width, int height) {
+void reshape(int width, int height) 
+{
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -894,17 +864,17 @@ void reshape(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void init() {
-
+void init() 
+{
     glEnable(GL_COLOR_MATERIAL); // cheat!!!!
     glEnable(GL_LIGHTING);
     GLfloat dir[] = { 0.2, 0.0, 1.0, 0.0 };
     glLightfv(GL_LIGHT0, GL_POSITION, dir);
     glEnable(GL_LIGHT0);
-
 }
 
-void setupMaterial() {
+void setupMaterial() 
+{
     // Set material properties
     GLfloat matAmbient[] = { 0.2, 0.2, 0.2, 1.0 };
     GLfloat matDiffuse[] = { 0.8, 0.8, 0.8, 1.0 };
@@ -917,7 +887,8 @@ void setupMaterial() {
     glMaterialfv(GL_FRONT, GL_SHININESS, matShininess);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -934,7 +905,3 @@ int main(int argc, char** argv) {
     glutMainLoop();
     return 0;
 }
-
-
-
-
