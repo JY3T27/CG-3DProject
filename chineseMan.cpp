@@ -12,6 +12,7 @@ const char* file_top_face = "C:/Users/HP/Desktop/cg images/top_face.jpg"; //"D:/
 const char* file_bottom_face = "C:/Users/HP/Desktop/cg images/bottom_face.jpg";  //"D:/Desktop/cg images/bottom_face.jpg";
 const char* file_front_body = "C:/Users/HP/Desktop/cg images/front_body.jpg";  //"D:/Desktop/cg images/front_body.jpg";
 const char* file_back_body = "C:/Users/HP/Desktop/cg images/back_body.jpg";  //"D:/Desktop/cg images/back_body.jpg";
+const char* file_hand = "C:/Users/HP/Desktop/cg images/hand.jpg";  //"D:/Desktop/cg images/hand.jpg";
 
 GLuint textureID[20];
 int width, height, channels;
@@ -90,6 +91,13 @@ void loadTexture()
     loadTexRepeats();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBack7);
     stbi_image_free(imageBack7);
+
+    unsigned char* imageBack8 = stbi_load(file_hand, &width, &height, &channels, 3);
+    glGenTextures(1, &textureID[9]);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]);
+    loadTexRepeats();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBack8);
+    stbi_image_free(imageBack8);
 }
 
 void drawBody() 
@@ -158,9 +166,10 @@ void drawBody()
     glVertex3fv(vertices[6]);
     glEnd();
 
-    glDisable(GL_TEXTURE_2D);
 
     // Draw the right face with textureID coordinates
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]);
     glBegin(GL_QUADS);
     glColor3f(0.55, 0.0, 0.0);
     glNormal3fv(normals[1]);
@@ -175,6 +184,8 @@ void drawBody()
     glEnd();
 
     // Draw the left face with textureID coordinates
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]);
     glBegin(GL_QUADS);
     glColor3f(0.55, 0.0, 0.0);
     glNormal3fv(normals[3]);
@@ -188,6 +199,7 @@ void drawBody()
     glVertex3fv(vertices[7]);
     glEnd();
 
+    
     glBegin(GL_QUADS);
     glNormal3fv(normals[4]);
     glTexCoord2fv(texCoords[0]);
@@ -211,6 +223,8 @@ void drawBody()
     glTexCoord2fv(texCoords[3]);
     glVertex3fv(vertices[7]);
     glEnd();
+
+    glDisable(GL_TEXTURE_2D);
 
     // Disable textureID mapping
     glPopMatrix();
@@ -389,9 +403,10 @@ void drawHand()
 
     glPushMatrix();
     glTranslatef(0.7, 0.5, 0);
-
+    
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]); 
     glBegin(GL_QUADS);
-    glColor3f(0.55, 0.0, 0.0);
     glNormal3fv(normals[1]);
     glTexCoord2fv(texCoords[1][0]);
     glVertex3fv(vertices[5]);
@@ -469,6 +484,8 @@ void drawHand()
     glVertex3fv(vertices[1]);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+    
     glPopMatrix();
 }
 
@@ -515,8 +532,9 @@ void drawHand_right()
     glPushMatrix();
     glTranslatef(-0.7, 0.5, 0);
 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]); 
     glBegin(GL_QUADS);
-    glColor3f(0.55, 0, 0);
     glNormal3fv(normals[1]);
     glTexCoord2fv(texCoords[1][0]);
     glVertex3fv(vertices[5]);
@@ -593,6 +611,8 @@ void drawHand_right()
     glVertex3fv(vertices[1]);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+    
     glPopMatrix();
 }
 
@@ -639,6 +659,8 @@ void drawLeg_left()
     glPushMatrix();
     glTranslatef(0.25, -0.6, 0);
 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]); 
     glBegin(GL_QUADS);
     glColor3f(0.1, 0.1, 0.1);
     glNormal3fv(normals[1]);
@@ -717,6 +739,8 @@ void drawLeg_left()
     glVertex3fv(vertices[1]);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+    
     glPopMatrix();
 }
 
@@ -762,7 +786,9 @@ void drawLeg_right()
 
     glPushMatrix();
     glTranslatef(-0.25, -0.6, 0);
-
+    
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID[9]); 
     glBegin(GL_QUADS);
     glColor3f(0.1, 0.1, 0.1);
     glNormal3fv(normals[1]);
@@ -841,6 +867,8 @@ void drawLeg_right()
     glVertex3fv(vertices[1]);
     glEnd();
 
+    glDisable(GL_TEXTURE_2D);
+    
     glPopMatrix();
 }
 
