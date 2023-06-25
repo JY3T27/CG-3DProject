@@ -1,11 +1,20 @@
 #include <GL/glut.h>
 #include "stb_image.h"
+
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 800
 
+const char* file_front_face = "C:/Users/HP/Desktop/cg images/front_face.jpg"; //"D:/Desktop/cg images/front_face.jpg";
+const char* file_back_face = "C:/Users/HP/Desktop/cg images/back_face.jpg";  //"D:/Desktop/cg images/back_face.jpg";
+const char* file_right_face = "C:/Users/HP/Desktop/cg images/right_face.jpg"; //"D:/Desktop/cg images/right_face.jpg";
+const char* file_left_face = "C:/Users/HP/Desktop/cg images/left_face.jpg"; //"D:/Desktop/cg images/left_face.jpg";
+const char* file_top_face = "C:/Users/HP/Desktop/cg images/top_face.jpg"; //"D:/Desktop/cg images/top_face.jpg";
+const char* file_bottom_face = "C:/Users/HP/Desktop/cg images/bottom_face.jpg";  //"D:/Desktop/cg images/bottom_face.jpg";
+const char* file_front_body = "C:/Users/HP/Desktop/cg images/front_body.jpg";  //"D:/Desktop/cg images/front_body.jpg";
+const char* file_back_body = "C:/Users/HP/Desktop/cg images/back_body.jpg";  //"D:/Desktop/cg images/back_body.jpg";
+
 GLuint textureID[20];
 int width, height, channels;
-
 
 void loadTexRepeats()
 {
@@ -21,7 +30,7 @@ void loadTexture()
     stbi_set_flip_vertically_on_load(true);
 
     //textureID 1
-    unsigned char* image = stbi_load("D:/Desktop/cg images/front_face.jpg", &width, &height, &channels, 3);
+    unsigned char* image = stbi_load(file_front_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[1]);
     glBindTexture(GL_TEXTURE_2D, textureID[1]);
     loadTexRepeats();
@@ -29,7 +38,7 @@ void loadTexture()
     stbi_image_free(image);
 
     //textureID 2
-    unsigned char* imageBack1 = stbi_load("D:/Desktop/cg images/back_face.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack1 = stbi_load(file_back_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[2]);
     glBindTexture(GL_TEXTURE_2D, textureID[2]);
     loadTexRepeats();
@@ -37,7 +46,7 @@ void loadTexture()
     stbi_image_free(imageBack1);
 
     //textureID 3
-    unsigned char* imageBack2 = stbi_load("D:/Desktop/cg images/right_face.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack2 = stbi_load(file_right_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[3]);
     glBindTexture(GL_TEXTURE_2D, textureID[3]);
     loadTexRepeats();
@@ -45,7 +54,7 @@ void loadTexture()
     stbi_image_free(imageBack2);
 
     //textureID 4
-    unsigned char* imageBack3 = stbi_load("D:/Desktop/cg images/left_face.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack3 = stbi_load(file_left_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[4]);
     glBindTexture(GL_TEXTURE_2D, textureID[4]);
     loadTexRepeats();
@@ -53,7 +62,7 @@ void loadTexture()
     stbi_image_free(imageBack3);
 
     //textureID 5
-    unsigned char* imageBack4 = stbi_load("D:/Desktop/cg images/top_face.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack4 = stbi_load(file_top_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[5]);
     glBindTexture(GL_TEXTURE_2D, textureID[5]);
     loadTexRepeats();
@@ -61,21 +70,21 @@ void loadTexture()
     stbi_image_free(imageBack4);
 
     //textureID 6
-    unsigned char* imageBack5 = stbi_load("D:/Desktop/cg images/bottom_face.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack5 = stbi_load(file_bottom_face, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[6]);
     glBindTexture(GL_TEXTURE_2D, textureID[6]);
     loadTexRepeats();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBack5);
     stbi_image_free(imageBack5);
 
-    unsigned char* imageBack6 = stbi_load("D:/Desktop/cg images/front_body.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack6 = stbi_load(file_front_body, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[7]);
     glBindTexture(GL_TEXTURE_2D, textureID[7]);
     loadTexRepeats();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageBack6);
     stbi_image_free(imageBack6);
 
-    unsigned char* imageBack7 = stbi_load("D:/Desktop/cg images/back_body.jpg", &width, &height, &channels, 3);
+    unsigned char* imageBack7 = stbi_load(file_back_body, &width, &height, &channels, 3);
     glGenTextures(1, &textureID[8]);
     glBindTexture(GL_TEXTURE_2D, textureID[8]);
     loadTexRepeats();
