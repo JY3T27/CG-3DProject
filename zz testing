@@ -7,24 +7,58 @@
 #include <math.h>
 #include "stb_image.h"
 
-#include <time.h>
-#include <chrono>
-#include <thread>
-
-
 #define PI 3.141592653
 #define SCREEN_WIDTH	1600
 #define SCREEN_HEIGHT	900
 #define FPS 30
 
+void display();
+void idle();
+void initGL();
+
+
+void loadTexture(const char* filePath);
+
+void background();
+
+
 GLuint textureID;
-int imageWidth, imageHeight, imageChannels;
 
-void loadTexture()
+
+bool rotate1 = false; // false = increase
+
+
+
+int main(int argc, char** argv) 
 {
-	// Load image using stb_image.h library
-	unsigned char* image = stbi_load("C:/Users/HP/Downloads/tt.rgb", &imageWidth, &imageHeight, &imageChannels, 0);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
+	glutInit(&argc, argv);
+	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	glutCreateWindow("Test");
+	const char* filePath = "C:/Users/HP/Downloads/tt.jpg";
+	loadTexture(filePath);
+	glutDisplayFunc(display);
+	glutIdleFunc(idle);
 
+	initGL();
+	// Call the function to load the texture
+
+
+	glutMainLoop();
+}
+
+
+
+void loadTexture(const char* filePath)
+{
+	int imageWidth, imageHeight, imageChannels;
+	// Load image using stb_image.h library
+	unsigned char* image = stbi_load(filePath, &imageWidth, &imageHeight, &imageChannels, 0);
+	if (!image)
+	{
+		printf("Failed to load texture: %s\n", filePath);
+		return;
+	}
 	// Generate a texture ID
 	glGenTextures(1, &textureID);
 
@@ -44,8 +78,25 @@ void loadTexture()
 	stbi_image_free(image);
 }
 
+void background()
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 
-void display() {
+	glBegin(GL_QUADS);
+	glColor3ub(255, 255, 255);
+
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(40.0, 40.0, -5.0);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-40.0, 40.0, -5.0);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-40.0, 2.0, -5.0);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(40.0, 2.0, -5.0);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void display() 
+{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glBegin(GL_QUADS);
@@ -75,38 +126,26 @@ void display() {
 	glVertex3f(-15.0, 0.0, 20.0);
 	glVertex3f(-15.0, 12.0, 20.0);
 
-	// Enable texturing
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glBegin(GL_QUADS);
-	glTexCoord3f(0.0f, 0.0f, -3.0f); glVertex3f(20.0, 20.0, -3.0);
-	glTexCoord3f(1.0f, 0.0f, -3.0f); glVertex3f(-20.0, 20.0, -3.0);
-	glTexCoord3f(1.0f, 1.0f, -3.0f); glVertex3f(-20.0, 2.0, -3.0);
-	glTexCoord3f(0.0f, 1.0f, -3.0f); glVertex3f(20.0, 2.0, -3.0);
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D);
-
-
-	glEnd();
-
+	background();
 
 	glFlush();
 	glutSwapBuffers();
 }
 
-void idle() {
+void idle()
+{
 	DWORD start = GetTickCount64();
 	while (GetTickCount64() - start < 1000 / FPS);
-
 
 	
 
 	glutPostRedisplay();
 }
 
-void initGL() {
+void initGL()
+{
 	glClearColor(0.15, 0.15, 0.15, 1.0);
 	glPointSize(10.0);
 	glLineWidth(5.0);
@@ -119,8 +158,8 @@ void initGL() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(0.0, 5.0, 50.0,  // camera position 
-			  0.0, 10.0, 0.0,   // camera direction 
-			  0.0, 1.0, 0.0); 
+		0.0, 10.0, 0.0,   // camera direction 
+		0.0, 1.0, 0.0);
 
 	// lights
 	glEnable(GL_COLOR_MATERIAL); // cheat!!!!
@@ -131,28 +170,4 @@ void initGL() {
 
 	// depth buffer
 	glEnable(GL_DEPTH_TEST);
-}
-
-void reshape(int width, int height)
-{
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0, (double)width / (double)height, 1.0, 100.0);
-}
-
-int main(int argc, char** argv) {
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
-	glutInit(&argc, argv);
-	glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	glutCreateWindow("Test");
-	loadTexture();
-	glutDisplayFunc(display);
-	glutIdleFunc(idle);
-	
-	initGL();
- // Call the function to load the texture
-
-
-	glutMainLoop();
 }
