@@ -1,0 +1,868 @@
+#include <stdio.h>
+#include <windows.h>
+#include <stdlib.h>
+#include <gl/gL.h>
+#include <gl/glu.h>
+#include <gl/glut.h>
+#include <math.h>
+
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 800
+#define FPS	30
+#define PI 3.141592653
+
+GLuint textureID[20];
+int width, height, channels;
+float angle = 0.0;
+float rotationDirection = 1.0f;
+bool rotate1 = false; // false = increase
+int scale = 2;
+float cord_z = 0.0;
+
+const int slices = 50;      // Number of horizontal slices
+const int stacks = 50;      // Number of vertical stacks
+const float radius = 0.4f;  // Radius of the sphere
+
+void eyes()
+{
+        // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.1, -0.1, -0.1},
+        {0.1, -0.1, -0.1},
+        {0.1, 0.1, -0.1},
+        {-0.1, 0.1, -0.1},
+        {-0.1, -0.1, 0.1},
+        {0.1, -0.1, 0.1},
+        {0.1, 0.1, 0.1},
+        {-0.1, 0.1, 0.1}
+
+    };
+    // Define the cuboid's normals
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {0.0, 0.0, 1.0},  // Front face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, -1.0, 0.0}, // Bottom face
+        {0.0, 1.0, 0.0}   // Top face
+    };
+
+
+
+    glPushMatrix();
+    glTranslatef(0.2, 2.0, 0.5);
+
+
+    // Draw the back face with textureID coordinates
+    glBegin(GL_QUADS);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the front face with textureID coordinates
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+
+    glPopMatrix();
+
+}
+
+void eyes_r()
+{
+    glPushMatrix();
+    glTranslatef(-0.4, 0, 0.0);
+
+    eyes();
+    glPopMatrix();
+
+}
+
+void drawBody() {
+    // Define the cuboid's vertices
+    GLfloat vertices[8][3] = {
+        {-0.49, -1.0, -0.25},
+        {0.49, -1.0, -0.25},
+        {0.49, 1.0, -0.25},
+        {-0.49, 1.0, -0.25},
+        {-0.49, -1.0, 0.25},
+        {0.49, -1.0, 0.25},
+        {0.49, 1.0, 0.25},
+        {-0.49, 1.0, 0.25}
+    };
+
+    // Define the cuboid's normals
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {0.0, 0.0, 1.0},  // Front face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, -1.0, 0.0}, // Bottom face
+        {0.0, 1.0, 0.0}   // Top face
+    };
+
+
+
+    glPushMatrix();
+    glTranslatef(0.0f, 1, 0.0f);
+
+
+    // Draw the back face with textureID coordinates
+    glBegin(GL_QUADS);
+    glColor3f(0.4f, 0.2f, 0.1f);
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the front face with textureID coordinates
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+
+    glPopMatrix();
+}
+
+void drawFace() {
+
+    // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.5, -0.5, -0.5},
+        {0.5, -0.5, -0.5},
+        {0.5, 0.5, -0.5},
+        {-0.5, 0.5, -0.5},
+        {-0.5, -0.5, 0.5},
+        {0.5, -0.5, 0.5},
+        {0.5, 0.5, 0.5},
+        {-0.5, 0.5, 0.5}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+    glPushMatrix();
+    glTranslatef(0.0f, 2, 0.0f);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.3f, 0.1f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+    glPopMatrix();
+}
+
+void drawGlove()
+{
+    GLfloat vertices[8][3] = {
+    {-0.3, -0.3, -0.3},
+    {0.3, -0.3, -0.3},
+    {0.3, 0.3, -0.3},
+    {-0.3, 0.3, -0.3},
+    {-0.3, -0.3, 0.3},
+    {0.3, -0.3, 0.3},
+    {0.3, 0.3, 0.3},
+    {-0.3, 0.3, 0.3}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+    glPushMatrix();
+    glTranslatef(0.7, 1.5, 0);
+
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+    glPopMatrix();
+}
+
+void drawHand() {
+    // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.2, -1.0, -0.2},
+        {0.2, -1.0, -0.2},
+        {0.2, 1.0, -0.2},
+        {-0.2, 1.0, -0.2},
+        {-0.2, -1.0, 0.2},
+        {0.2, -1.0, 0.2},
+        {0.2, 1.0, 0.2},
+        {-0.2, 1.0, 0.2}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+
+
+    glPushMatrix();
+    glTranslatef(0.7, 0.6, 0);
+
+
+    glBegin(GL_QUADS);
+    glColor3f(0.3f, 0.1f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    // Draw the front face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the right face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    // Draw the left face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the top face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the bottom face with textureID coordinates and normal vectors
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+
+    glPopMatrix();
+
+    drawGlove();
+
+
+
+}
+
+void drawHand_right()
+{
+    // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.2, -1.0, -0.2},
+        {0.2, -1.0, -0.2},
+        {0.2, 1.0, -0.2},
+        {-0.2, 1.0, -0.2},
+        {-0.2, -1.0, 0.2},
+        {0.2, -1.0, 0.2},
+        {0.2, 1.0, 0.2},
+        {-0.2, 1.0, 0.2}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+
+    glPushMatrix();
+    glTranslatef(-0.7, 0.58, 0);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.3f, 0.1f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    // Draw the front face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the right face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    // Draw the left face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the top face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the bottom face with textureID coordinates and normal vectors
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-1.4, 0, 0);
+    drawGlove();
+    glPopMatrix();
+}
+
+void drawLeg_left()
+{
+    // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.2, -1.0, -0.2},
+        {0.2, -1.0, -0.2},
+        {0.2, 1.0, -0.2},
+        {-0.2, 1.0, -0.2},
+        {-0.2, -1.0, 0.2},
+        {0.2, -1.0, 0.2},
+        {0.2, 1.0, 0.2},
+        {-0.2, 1.0, 0.2}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+    glPushMatrix();
+    glTranslatef(0.25, -0.9, 0);
+
+
+    glBegin(GL_QUADS);
+    glColor3f(0.3f, 0.1f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    // Draw the front face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the right face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    // Draw the left face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the top face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the bottom face with textureID coordinates and normal vectors
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+
+    glPopMatrix();
+
+}
+
+void drawLeg_right()
+{
+    // Define the cube's vertices
+    GLfloat vertices[8][3] = {
+        {-0.2, -1.0, -0.2},
+        {0.2, -1.0, -0.2},
+        {0.2, 1.0, -0.2},
+        {-0.2, 1.0, -0.2},
+        {-0.2, -1.0, 0.2},
+        {0.2, -1.0, 0.2},
+        {0.2, 1.0, 0.2},
+        {-0.2, 1.0, 0.2}
+    };
+
+    // Define the cube's normal vectors
+    GLfloat normals[6][3] = {
+        {0.0, 0.0, -1.0}, // Front face
+        {0.0, 0.0, 1.0},  // Back face
+        {1.0, 0.0, 0.0},  // Right face
+        {-1.0, 0.0, 0.0}, // Left face
+        {0.0, 1.0, 0.0},  // Top face
+        {0.0, -1.0, 0.0}  // Bottom face
+    };
+
+
+    glPushMatrix();
+    glTranslatef(-0.25, -0.9, 0);
+
+    glBegin(GL_QUADS);
+    glColor3f(0.3f, 0.1f, 0.0f);
+    glNormal3fv(normals[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[6]);
+    glEnd();
+
+    // Draw the front face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[0]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[3]);
+    glEnd();
+
+
+    // Draw the right face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+
+    glNormal3fv(normals[2]);
+    glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[2]);
+    glEnd();
+
+    // Draw the left face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[3]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the top face with textureID coordinates and normal vectors
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[4]);
+    glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[7]);
+    glEnd();
+
+    // Draw the bottom face with textureID coordinates and normal vectors
+
+    glBegin(GL_QUADS);
+    glNormal3fv(normals[5]);
+    glVertex3fv(vertices[0]);
+    glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[1]);
+    glEnd();
+
+
+    glPopMatrix();
+
+}
+
+void human()
+{
+
+    glPushMatrix();
+    glTranslatef(0, 0, cord_z);
+    eyes();
+    eyes_r();
+    drawFace();
+    drawBody();
+
+    glPushMatrix();
+    glTranslatef(0, 1, 0.0);
+    glRotatef(180, 1.0f, 0.0f, 0.0f);
+    glRotatef(angle, 1.0f, 0.0f, 0.0f);
+    drawHand();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 1, 0.0);
+    glRotatef(180, 1.0f, 0.0f, 0.0f);
+    glRotatef(-angle, 1.0f, 0.0f, 0.0f);
+    drawHand_right();
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(-angle, 1.0f, 0.0f, 0.0f);
+    drawLeg_left();
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(angle, 1.0f, 0.0f, 0.0f);
+    drawLeg_right();
+    glPopMatrix();
+
+
+    glPopMatrix();
+}
+
+void display() {
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glLoadIdentity();
+    gluLookAt(0.0, 0.0, 10.0,  // camera position 
+        0.0, 1.0, 0.0,   // camera direction 
+        0.0, 1.0, 0.0);
+
+    glEnable(GL_DEPTH_TEST);    // Enable depth testing
+    human();
+
+    glFlush();
+    glutSwapBuffers();
+}
+
+void idle() {
+
+    DWORD start = GetTickCount64();
+    while (GetTickCount64() - start < 1000 / FPS);
+
+    /*if (angle >= -90.0 && rotate1 == false)
+    {
+        angle -= 5;
+        if (angle == -90.0)
+        {
+            rotate1 = true;
+        }
+    }
+    if (rotate1 == true)
+    {
+        angle += 5;
+        if (angle == 90.0)
+        {
+            rotate1 = false;
+        }
+    }
+
+    cord_z += 0.1;
+    */
+    glutPostRedisplay();
+
+}
+
+void init() {
+
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING); // Enable lighting calculations
+    glEnable(GL_LIGHT0);   // Enable light source 0
+
+    GLfloat ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //illumination
+    GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };  //uniform
+    GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //reflection
+    GLfloat position[] = { -0.6f, 0.0f, 0.8f, 0.0f };
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);     // Set ambient light properties
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);     // Set diffuse light properties
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular);   // Set specular light properties
+    glLightfv(GL_LIGHT0, GL_POSITION, position);
+
+}
+
+void reshape(int width, int height) {
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, (double)width / (double)height, 0.1, 100.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    glutCreateWindow("Solid Cube");
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
+    init();    // Set up lighting
+    //setupMaterial();    // Set up material properties
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    glutReshapeFunc(reshape);
+    //loadTexture();
+
+    glutMainLoop();
+    return 0;
+}
