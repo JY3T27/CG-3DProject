@@ -295,25 +295,21 @@ void idle()
         }
     }
 
-    if (timer1 >= 0 && timer1 <= 50)
+    if (timer1 >= 0 && timer1 <= 10)
     {
 
     }
-    else if (timer1 > 50 && timer1 <= 100)
+    else if (timer1 > 10 && timer1 <= 30)
     {
         handAngleL = -100.0f;
         handAngleR = -100.0f;
     }
-    else if (timer1 > 100 && timer1 <= 120)
-    {
-     
-    }
-    else if (timer1 > 120 && timer1 <= 1000)
+    else if (timer1 > 30 && timer1 <= 260)
     {
         hitting = true;
         
     }
-    else if (timer1 > 1000 && timer1 <= 1100)
+    else if (timer1 > 260 && timer1 <= 1100)
     {
         hitting = false;
     }
