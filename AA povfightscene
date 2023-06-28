@@ -25,32 +25,32 @@ const char* file_hand = "C:/Users/HP/Desktop/cg images/hand.jpg";  //"D:/Desktop
 
 const float scale = 2.0f;
 const float walkSpeed = 4.0f;
-const float flySpeed = 0.1f;
-const float rotateSpeed = 2.5f;
-const float cheerSpeed = 5.0f;
+const float handSpeed = 15.0f;
 
 GLuint textureID[20];
 int width, height, channels;
-float cameraX = 1.5f;
-float cameraY = 0.7f;
-float cameraZ = 1.5f;
+float cameraX = 1.0f;
+float cameraY = 0.9f;
+float cameraZ = 1.0f;
 float targetX = 0.0f;
 float targetY = 0.8f;
 float targetZ = 0.0f;
 
 int timer1 = 0;
-int cheerCount = 0;
+int timer2 = 0;
 float chinAngle = 45.0f;
-float chinPosX = -0.85f;
+float chinPosX = 0.1f;
 float chinPosY = 0.5f;
-float chinPosZ = -1.0f;
-float walkAngleL, walkAngleR;
-float cheerL = 0.0f;
-float cheerR = 0.0f;
+float chinPosZ = -0.05f;
+float walkAngleL = 0.0f;
+float walkAngleR = 0.0f;
+float handAngleL = -100.0f;
+float handAngleR = -100.0f;
+float chinHandLZ = 0.0f;
+float chinHandRZ = 0.0f;
 
-bool walking = false;
-bool rotate1 = false;
-
+bool hitting = false;
+bool rotate2 = true;
 
 void display();
 void reshape(int width, int height);
@@ -129,7 +129,6 @@ void init()
     GLfloat light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };   // Diffuse color of the light
     GLfloat material_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f }; // Diffuse color of the material
 
-    //glClearColor(0.0f, 0.0f, 0.0f, 0.0f);     // Clear color to black
     glEnable(GL_COLOR_MATERIAL); // cheat!!!!
     glEnable(GL_DEPTH_TEST);                  // Enable depth testing
     glEnable(GL_LIGHTING);                    // Enable lighting
@@ -250,34 +249,44 @@ void idle()
     DWORD start = GetTickCount64();
     while (GetTickCount64() - start < 1000 / FPS);
 
-    if (walking == true)
+    if (hitting == true)
     {
-        if (rotate1 == true)
+
+        if (rotate2 == true)
         {
-            walkAngleL += walkSpeed;
-            walkAngleR -= walkSpeed;
-            if (walkAngleL >= 50.0)
+            handAngleL += handSpeed;
+            handAngleR -= handSpeed;
+            if (handAngleL >= -60.0f)
             {
-                rotate1 = false;
+                rotate2 = false;
             }
         }
         else
         {
-            walkAngleL -= walkSpeed;
-            walkAngleR += walkSpeed;
-            if (walkAngleL <= -50.0)
+            handAngleL -= handSpeed;
+            handAngleR += handSpeed;
+            if (handAngleL <= -140.0f)
             {
-                rotate1 = true;
+                rotate2 = true;
             }
         }
     }
+
+    timer1 += 1;
+
+    if (timer1 >= 0 && timer1 <= 200)
+    {
+        hitting = true;
+    }
     else
     {
-        walkAngleL = 0.0f;
-        walkAngleR = 0.0f;
+        hitting = false;
     }
 
-    
+
+
+
+
 
 
     glutPostRedisplay();
@@ -311,8 +320,8 @@ void background()
     glBegin(GL_QUADS);
     glNormal3f(0.0, 0.0, 1.0);
     glTexCoord2f(0.0, 0.0); glVertex3f(-7.0, -5.0, 1.0);
-    glTexCoord2f(0.5, 0.0); glVertex3f(3.0, -5.0, -5.0);
-    glTexCoord2f(0.5, 1.0); glVertex3f(3.0, 3.0, -5.0);
+    glTexCoord2f(1.0, 0.0); glVertex3f(3.0, -5.0, -5.0);
+    glTexCoord2f(1.0, 1.0); glVertex3f(3.0, 3.0, -5.0);
     glTexCoord2f(0.0, 1.0); glVertex3f(-7.0, 3.0, 1.0);
     glEnd();
     glDisable(GL_TEXTURE_2D);
@@ -327,7 +336,7 @@ void chinesePP()
     glScaled(0.3, 0.3, 0.3);
     glTranslated(-chinPosX, -chinPosY, -chinPosZ);
     glRotated(chinAngle, 0.0, 1.0, 0.0);
-    
+
 
     drawFace();
     drawBody();
@@ -335,8 +344,8 @@ void chinesePP()
     //Left Hand 
     glPushMatrix();
     glTranslated(0.65, 1.31, 0.0);
-    glRotatef(walkAngleL, 1.0f, 0.0f, 0.0f); //movement x direction  
-    glRotated(cheerL, 0.0, 0.0, 1.0);        //movement z direction  120
+    glRotatef(handAngleL, 1.0f, 0.0f, 0.0f); //movement x direction  
+    glRotated(chinHandLZ, 0.0, 0.0, 1.0);        //movement z direction  120
     glTranslated(-0.65, -1.31, 0.0);
     drawHand();
     glPopMatrix();
@@ -344,8 +353,8 @@ void chinesePP()
     //Right Hand 
     glPushMatrix();
     glTranslated(-0.63, 1.31, 0.0);
-    glRotatef(walkAngleR, 1.0f, 0.0f, 0.0f); //movement x direction  
-    glRotated(cheerR, 0.0, 0.0, 1.0);          //movement z direction  120
+    glRotatef(handAngleR, 1.0f, 0.0f, 0.0f); //movement x direction  
+    glRotated(chinHandRZ, 0.0, 0.0, 1.0);          //movement z direction  120
     glTranslated(0.63, -1.31, 0.0);
     drawHand_right();
     glPopMatrix();
@@ -353,7 +362,7 @@ void chinesePP()
     //Left Leg
     glPushMatrix();
     glTranslated(-0.63, 0.0, 0.0);
-    glRotatef(walkAngleR, 1.0f, 0.0f, 0.0f); //movement x direction  
+    glRotatef(walkAngleL, 1.0f, 0.0f, 0.0f); //movement x direction  
     glTranslated(0.63, 0.0, 0.0);
     drawLeg_left();
     glPopMatrix();
@@ -361,7 +370,7 @@ void chinesePP()
     //Right Leg
     glPushMatrix();
     glTranslated(0.65, 0.0, 0.0);
-    glRotatef(walkAngleL, 1.0f, 0.0f, 0.0f); //movement x direction  
+    glRotatef(walkAngleR, 1.0f, 0.0f, 0.0f); //movement x direction  
     glTranslated(-0.65, 0.0, 0.0);
     drawLeg_right();
     glPopMatrix();
