@@ -1170,7 +1170,7 @@ void display() {
     glRotatef(angle, 1.0f, 0.0f, 0.0f);
     drawLeg_right();
     glPopMatrix();
-    
+
     glPopMatrix();
 
     background();
@@ -1180,10 +1180,10 @@ void display() {
 }
 
 void idle() {
-    
+
     DWORD start = GetTickCount64();
     while (GetTickCount64() - start < 1000 / FPS);
-    
+
     if (angle >= -90.0 && rotate1 == false)
     {
         angle -= 5;
@@ -1200,8 +1200,8 @@ void idle() {
             rotate1 = false;
         }
     }
-    
-    cord_z += 0.1;
+
+    cord_z += 0.25;
     glutPostRedisplay();
 
 }
@@ -1222,13 +1222,13 @@ void init() {
     GLfloat ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //illumination
     GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };  //uniform
     GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //reflection
-    GLfloat position[] = { -0.6f, 0.0f, 0.8f, 0.0f }; 
+    GLfloat position[] = { -0.6f, 0.0f, 0.8f, 0.0f };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);     // Set ambient light properties
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);     // Set diffuse light properties
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);   // Set specular light properties
     glLightfv(GL_LIGHT0, GL_POSITION, position);
-    
+
 }
 
 void setupMaterial() {
