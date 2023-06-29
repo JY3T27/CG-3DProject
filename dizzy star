@@ -1,0 +1,213 @@
+#include <windows.h>
+#include <stdlib.h>
+#include <gl\GL.h>
+#include <gl\GLU.h>
+#include <gl\glut.h>
+#include <math.h>
+#include "stb.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#define PI 3.141592653
+
+#define SCREEN_WIDTH	800
+#define SCREEN_HEIGHT	800
+#define FPS	30
+
+float angle = 0.0;
+float orbitRadius = 2.5;
+float rotationSpeed = 1.0;
+float rotationAcceleration = 0.1;
+float inclination = 30.0;
+float inclinationAngle = 30.0; // Inclination angle in degrees
+float tiltAngle = 45.0; // Tilt angle in degrees
+float starScale = 0.25; // Scaling factor for the star
+
+
+void doubleTriangle() {
+    glPushMatrix();
+    glTranslated(0.0, -2.7, 0.0);
+    glBegin(GL_TRIANGLES);           // Begin drawing the star with 10 triangles
+
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.0f);
+
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.0f, 4.0f, 0.25f);
+
+    glTexCoord2f(0.5f, 1.0f);
+    glVertex3f(0.0f, 2.6f, 0.25f);
+
+    // Upper-right triangle
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.0f, 4.0f, 0.25f);
+
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.0f);
+
+    glTexCoord2f(0.5f, 1.0f);
+    glVertex3f(0.0f, 2.6f, 0.25f);
+
+    // Extrude the triangles along the z-axis
+    glBegin(GL_QUADS);
+
+    // Upper-left triangle extrusion
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.0f, 4.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 3.0f, 0.5f);
+
+    // Upper-right triangle extrusion
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.0f, 4.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 3.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+
+    // Side quad extrusions
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.5f, 3.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-0.5f, 3.0f, 0.5f);
+
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.5f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(-0.5f, 3.0f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.0f);
+
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(0.5f, 3.0f, 0.5f);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.5f);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(0.0f, 4.0f, 0.0f);
+
+    glEnd();
+    glPopMatrix();
+}
+
+void star() {
+    glPushMatrix();
+    glScalef(starScale, starScale, starScale); // Apply scaling to the star
+    glColor3f(1.0f, 1.0f, 0.0f);
+    doubleTriangle();
+    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
+    doubleTriangle();
+    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
+    doubleTriangle();
+    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
+    doubleTriangle();
+    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
+    doubleTriangle();
+    glPopMatrix();
+}
+
+
+
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+
+    glPushMatrix();
+    glRotated(tiltAngle, 1.0, 0.0, 0.0); // Apply tilt to the entire scene
+    glTranslated(0.0, 0.0, -orbitRadius);
+    glRotated(angle * 5.0, 0.0, 1.0, 0.0);
+    glRotated(inclinationAngle, 1.0, 0.0, 0.0); // Apply inclination to the orbit
+    glTranslated(0.0, 0.0, orbitRadius);
+    star();
+    glPopMatrix();
+
+    glFlush();
+    glutSwapBuffers();
+}
+
+void idle() {
+    DWORD start = GetTickCount64();
+    while (GetTickCount64() - start < 1000 / FPS);
+
+    angle += rotationSpeed;
+    //rotationSpeed += rotationAcceleration;
+    if (angle > 360.0) angle = 0.0;
+
+    glutPostRedisplay();
+}
+
+void initGL() {
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glPointSize(10.0);
+    glLineWidth(5.0);
+
+    GLfloat black[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
+    GLfloat cyan[] = { 0.0, 1.0, 1.0, 1.0 };
+    GLfloat white[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat direction[] = { 1.0, 1.0, 1.0, 0.0 };
+
+    // camera setup
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, 1.0, 0.0001, 1000.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+    /* lights
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    GLfloat dir[] = { 0.2, 0.0, 1.0, 0.0 };
+    glLightfv(GL_LIGHT0, GL_POSITION, dir);
+    glEnable(GL_LIGHT0);*/
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, yellow);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+    glMaterialf(GL_FRONT, GL_SHININESS, 30);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, black);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, yellow);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+    glLightfv(GL_LIGHT0, GL_POSITION, direction);
+
+    glEnable(GL_LIGHTING);                // so the renderer considers light
+    glEnable(GL_LIGHT0);                  // turn LIGHT0 on
+    glEnable(GL_DEPTH_TEST);              // so the renderer considers depth
+}
+
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    glutCreateWindow("Star");
+    glutDisplayFunc(display);
+    glutIdleFunc(idle);
+    initGL();
+
+    rotationSpeed = 1.0;
+    rotationAcceleration = 0.05;
+
+    glutMainLoop();
+}
