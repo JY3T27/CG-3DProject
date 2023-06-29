@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glEnable(GL_DEPTH_TEST);
-	loadTexture("C:/Users/HP/Downloads/tt.jpg");
+	loadTexture("C:/Users/HP/Desktop/cg images/tt.jpg");
 	glutIdleFunc(idle);
 
 	glutMainLoop();
@@ -146,7 +146,7 @@ void idle()
 	{
 		timer1 = timer1;
 	}
-	
+
 
 	glutPostRedisplay();
 }
@@ -320,12 +320,12 @@ void drawSphere(float radius, int slices, int stacks)
 	float thetaStep = 2.0f * PI / slices;
 	float phiStep = PI / stacks;
 
-	for (int i = 0; i < stacks; ++i) 
+	for (int i = 0; i < stacks; ++i)
 	{
 		phi = -PI / 2.0f + (float)i * phiStep; // Start from the bottom and go upwards
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for (int j = 0; j <= slices; ++j) 
+		for (int j = 0; j <= slices; ++j)
 		{
 			theta = j * thetaStep;
 
@@ -377,7 +377,7 @@ void stage()
 	glPopMatrix();
 }
 
-void announcer() 
+void announcer()
 {
 	glPushMatrix();
 	glScaled(0.2, 0.2, 0.2);
@@ -388,7 +388,7 @@ void announcer()
 	glPopMatrix();
 }
 
-void mic() 
+void mic()
 {
 	glPushMatrix();
 	glColor3ub(0, 0, 0);
@@ -435,25 +435,25 @@ void humanModel()
 	glRotatef(rightHandAngleY, 0.0, 1.0, 0.0);
 	glTranslatef(-3.0, -0.3, 0.0);
 	glPushMatrix();
-		glTranslatef(3.0, 0.3, 0.0);
-		glRotatef(rightHandAngleZ, 1.0, 0.0, 0.0);
-		glTranslatef(-3.0, -0.3, 0.0);
+	glTranslatef(3.0, 0.3, 0.0);
+	glRotatef(rightHandAngleZ, 1.0, 0.0, 0.0);
+	glTranslatef(-3.0, -0.3, 0.0);
 
-		//right hand
-		glPushMatrix();
-		glColor3ub(32, 32, 32);
-		glScaled(0.4, 1.0, 0.3);
-		glTranslated(-3.9, -0.5, 0.0);
-		glutSolidCube(2.0);
-		glPopMatrix();
+	//right hand
+	glPushMatrix();
+	glColor3ub(32, 32, 32);
+	glScaled(0.4, 1.0, 0.3);
+	glTranslated(-3.9, -0.5, 0.0);
+	glutSolidCube(2.0);
+	glPopMatrix();
 
-		//right fist
-		glPushMatrix();
-		glColor3f(0.95f, 0.75f, 0.6f);
-		glScaled(0.1, 0.1, 0.1);
-		glTranslated(-16.0, -18, 0.0);
-		glutSolidSphere(3.0, 25.0, 25.0);
-		glPopMatrix();
+	//right fist
+	glPushMatrix();
+	glColor3f(0.95f, 0.75f, 0.6f);
+	glScaled(0.1, 0.1, 0.1);
+	glTranslated(-16.0, -18, 0.0);
+	glutSolidSphere(3.0, 25.0, 25.0);
+	glPopMatrix();
 	glPopMatrix();
 	glPopMatrix();
 
