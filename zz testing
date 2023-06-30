@@ -39,13 +39,13 @@ float targetZ = 0.0f;
 
 int timer1 = 0;
 float chinAngle = 120.0f;
-float chinPosX = -0.2f;
-float chinPosY = 0.5f;
-float walkAngleL = 0.0f;
-float walkAngleR = 0.0f;
-float handAngleL = 0.0f;
-float handAngleR = 0.0f;
-float chinAngleZ = 0.0f;
+float chinPosX = -1.2f;
+float chinPosY = 0.2f;
+float walkAngleL = -100.0f;
+float walkAngleR = -100.0f;
+float handAngleL = -100.0f;
+float handAngleR = -100.0f;
+float chinAngleZ = 75.0f;
 
 float humAngle = -30.0f;
 float humPosX = 1.1f;
@@ -53,18 +53,18 @@ float humPosY = 0.6f;
 float humPosZ = 0.6f;
 float walkAngleLH = 0.0f;
 float walkAngleRH = 0.0f;
-float handAngleLH = -95.0f;
-float handAngleRH = -95.0f;
+float handAngleLH = 0.0f;
+float handAngleRH = 0.0f;
 float humBodyAngle = 0.0f;
 
-float angle = 0.0;
-float orbitRadius = 2.5;
-float rotationSpeed = 1.0;
-float rotationAcceleration = 0.1;
-float inclination = 30.0;
-float inclinationAngle = 30.0; // Inclination angle in degrees
-float tiltAngle = 45.0; // Tilt angle in degrees
-float starScale = 0.1; // Scaling factor for the star
+float angle = 0.0f;
+float orbitRadius = 0.5f;
+float rotationSpeed = 1.0f;
+float rotationAcceleration = 0.1f;
+float inclination = 30.0f;
+float inclinationAngle = 30.0f; // Inclination angle in degrees
+float tiltAngle = 45.0f; // Tilt angle in degrees
+float starScale = 0.1f; // Scaling factor for the star
 
 bool falling = false;
 bool starShow = false;
@@ -86,8 +86,6 @@ void drawCylinder(float radius, float height);
 void drawLine3D(float startX, float startY, float startZ, float endX, float endY, float endZ);
 void groupLines();
 void groupCylinder();
-void doubleTriangle();
-void star();
 
 //chinese 
 void drawBody();
@@ -136,11 +134,6 @@ void display()
     human();
     background();
     stage();
-
-    if (starShow == true)
-    {
-        star();
-    }
 
     glFlush();
     glutSwapBuffers();
@@ -250,59 +243,7 @@ void idle()
     DWORD start = GetTickCount64();
     while (GetTickCount64() - start < 1000 / FPS);
 
-    if (humBodyAngle < 10.0f && falling == false)
-    {
-        humBodyAngle += 0.5f;
-    }
-    else
-    {
-        falling = true;
-    }
-
-    if (falling == true)
-    {
-        walkAngleL = -100.0f;
-        walkAngleR = -100.0f;
-        handAngleL = -100.0f;
-        handAngleR = -100.0f;
-        if (chinPosY > 0.2f)
-        {
-            chinPosX -= 3 * flySpeed;
-            chinPosY -= flySpeed;
-            chinAngleZ += 2.0f;
-            timer1 += 1;
-        }
-    }
-
-    if (timer1 >= 0 && timer1 <= 10)
-    {
-
-    }
-    else if (timer1 > 10 && timer1 <= 30)
-    {
-        if (humBodyAngle > 0.0f)
-        {
-            humBodyAngle -= 0.5f;
-        }
-    }
-    else
-    {
-        timer1 = timer1;
-    }
-
-    if (chinPosY <= 0.2f)
-    {
-        handAngleLH = 0.0f;
-        handAngleRH = 0.0f;
-        starShow = true;
-    }
-
-    if (starShow == true)
-    {
-        angle += rotationSpeed;
-        //rotationSpeed += rotationAcceleration;
-        if (angle > 360.0) angle = 0.0;
-    }
+ 
 
     glutPostRedisplay();
 }
@@ -402,17 +343,17 @@ void human()
     humeyes();
     humeyes_r();
     humdrawFace();
-    
+
     glPushMatrix();
     glRotatef(humBodyAngle, 0.0f, 1.0f, 0.0f);
     humdrawBody();
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0.6f, 1.2f - humBodyAngle/50, 0.0f);
+    glTranslatef(0.6f, 1.2f - humBodyAngle / 50, 0.0f);
     glRotatef(handAngleLH, 1.0f, 0.0f, 0.0f);
     glRotatef(-humBodyAngle, 0.0f, 0.0f, 1.0f);
-    glTranslatef(-0.6f, -(1.2f - humBodyAngle/50), 0.0f);
+    glTranslatef(-0.6f, -(1.2f - humBodyAngle / 50), 0.0f);
     glPushMatrix();
     glTranslatef(0.0f, 1.0f, 0.0f);
     glRotatef(180, 1.0f, 0.0f, 0.0f);
@@ -421,10 +362,10 @@ void human()
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(-0.6f, 1.2f + humBodyAngle/50, 0.0f);
+    glTranslatef(-0.6f, 1.2f + humBodyAngle / 50, 0.0f);
     glRotatef(handAngleRH, 1.0f, 0.0f, 0.0f);
     glRotatef(-humBodyAngle, 0.0f, 0.0f, 1.0f);
-    glTranslatef(0.6f, -(1.2f + humBodyAngle/50), 0.0f);
+    glTranslatef(0.6f, -(1.2f + humBodyAngle / 50), 0.0f);
     glPushMatrix();
     glTranslatef(0, 1, 0.0);
     glRotatef(180, 1.0f, 0.0f, 0.0f);
@@ -1989,120 +1930,5 @@ void humdrawLeg_right()
     glVertex3fv(vertices[1]);
     glEnd();
 
-    glPopMatrix();
-}
-
-void doubleTriangle() {
-    glPushMatrix();
-    glTranslated(0.0, -2.7, 0.0);
-    glBegin(GL_TRIANGLES);           // Begin drawing the star with 10 triangles
-
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.0f);
-
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.0f, 4.0f, 0.25f);
-
-    glTexCoord2f(0.5f, 1.0f);
-    glVertex3f(0.0f, 2.6f, 0.25f);
-
-    // Upper-right triangle
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.0f, 4.0f, 0.25f);
-
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.0f);
-
-    glTexCoord2f(0.5f, 1.0f);
-    glVertex3f(0.0f, 2.6f, 0.25f);
-
-    // Extrude the triangles along the z-axis
-    glBegin(GL_QUADS);
-
-    // Upper-left triangle extrusion
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.0f, 4.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 3.0f, 0.5f);
-
-    // Upper-right triangle extrusion
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.0f, 4.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 3.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-
-    // Side quad extrusions
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 3.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 3.0f, 0.5f);
-
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.5f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, 3.0f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.0f);
-
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 3.0f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.0f, 4.0f, 0.0f);
-
-    glEnd();
-    glPopMatrix();
-}
-
-void star() {
-    glPushMatrix();
-    glRotated(tiltAngle, 1.0, 0.0, 0.0); // Apply tilt to the entire scene
-    glTranslated(0.0, 0.0, -orbitRadius);
-    glRotated(angle * 5.0, 0.0, 1.0, 0.0);
-    glRotated(inclinationAngle, 1.0, 0.0, 0.0); // Apply inclination to the orbit
-    glTranslated(0.0, 0.0, orbitRadius);
-
-    glPushMatrix();
-    glTranslated(-3.7f, 0.7f, 0.0f);
-    glPushMatrix();
-    glScalef(starScale, starScale, starScale); // Apply scaling to the star
-    glColor3f(1.0f, 1.0f, 0.0f);
-    doubleTriangle();
-    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
-    doubleTriangle();
-    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
-    doubleTriangle();
-    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
-    doubleTriangle();
-    glRotatef(72.0f, 0.0f, 0.0f, 1.0f);
-    doubleTriangle();
-    glPopMatrix();
-    glPopMatrix();
     glPopMatrix();
 }
