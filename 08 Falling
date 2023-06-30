@@ -2082,7 +2082,7 @@ void doubleTriangle() {
 
 void star() {
     glPushMatrix();
-    glTranslated(-4.2f, 0.7f, 0.5f);
+    glTranslated(-3.0f, 0.7f, 1.0f);
     glTranslated(0.0, 0.0, -orbitRadius);
     glRotated(angle * 5.0, 0.0, 1.0, 0.0);
     glTranslated(0.0, 0.0, orbitRadius);
@@ -2105,7 +2105,7 @@ void star() {
     glPopMatrix();
 
     glPushMatrix();
-    glTranslated(-4.2f, 0.7f, (0.5f - 2.0 * orbitRadius));
+    glTranslated(-3.0f, 0.7f, (1.0f - 2.0 * orbitRadius));
     glTranslated(0.0, 0.0, orbitRadius);
     glRotated(angle * 5.0, 0.0, 1.0, 0.0);
     glTranslated(0.0, 0.0, -orbitRadius);
