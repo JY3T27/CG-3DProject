@@ -1,0 +1,10 @@
+const char* file_front_face = "D:/Desktop/cg images/front_face.jpg";
+const char* file_back_face = "D:/Desktop/cg images/back_face.jpg";
+const char* file_right_face = "D:/Desktop/cg images/right_face.jpg";
+const char* file_left_face = "D:/Desktop/cg images/left_face.jpg";
+const char* file_top_face = "D:/Desktop/cg images/top_face.jpg";
+const char* file_bottom_face = "D:/Desktop/cg images/bottom_face.jpg";
+const char* file_front_body = "D:/Desktop/cg images/front_body.jpg";
+const char* file_back_body = "D:/Desktop/cg images/back_body.jpg";
+const char* file_background = "D:/Desktop/cg images/tt.jpg";
+const char* file_hand = "D:/Desktop/cg images/hand.jpg";
